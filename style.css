@@ -1,0 +1,244 @@
+/* 1. المتغيرات (تنظيم الألوان) */
+:root {
+  --primary-color: #38bdf8;    /* اللون الأزرق الأساسي */
+  --primary-hover: #0ea5e9;    /* لون الزر عند المرور */
+  --dark-bg: #1e293b;          /* لون الشريط العلوي والتذييل */
+  --light-bg: #f9f9f9;         /* لون خلفية الصفحة */
+  --text-dark: #222;           /* لون النص الغامق */
+  --text-light: #fff;          /* لون النص الفاتح */
+  --text-gray: #555;           /* لون النص الرمادي */
+}
+
+/* 2. إعدادات عامة */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Tahoma", sans-serif;
+  background-color: var(--light-bg); /* ✅ تصحيح: خلفية فاتحة */
+  color: var(--text-dark);
+}
+
+/* 3. الشريط العلوي */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: var(--dark-bg);
+  color: var(--text-light);
+
+      position: relative;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--primary-color); /* ✅ تصحيح: الشعار أزرق */
+  white-space: nowrap;
+}
+
+.navbar nav {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar nav a {
+  font-size: 14px;
+  color: var(--text-light);
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.navbar nav a:hover {
+  color: var(--primary-color);
+}
+
+/* 4. قسم الترحيب */
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  color: var(--text-dark); /* ✅ تصحيح: تم إكمال اللون المفقود */
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text-gray);
+  margin-bottom: 30px;
+}
+
+/* 5. الزر */
+.btn {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  padding: 12px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* 6. التصميم المتجاوب للشاشات الكبيرة */
+@media (min-width: 768px) {
+  .navbar {
+    padding: 20px 50px;
+  }
+  
+  .hero {
+    padding: 150px 20px;
+  }
+  
+  .hero h1 {
+    font-size: 56px;
+  }
+  
+  .hero p {
+    font-size: 22px;
+  }
+}
+
+/* 7. تذييل الصفحة */
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--dark-bg);
+  color: var(--text-light);
+  margin-top: 50px;
+}
+
+.footer p {
+  font-size: 14px;
+  color: #94a3b8;
+}
+/* 8. قسم الدورات */
+.courses {
+  padding: 60px 20px;
+  background-color: var(--light-bg);
+}
+
+.section-title {
+  text-align: center;
+  font-size: 32px;
+  color: var(--text-dark);
+  margin-bottom: 40px;
+}
+
+/* الحاوية التي ستضم البطاقات بجانب بعضها */
+.courses-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* يجعل البطاقات تتوزع تلقائياً حسب حجم الشاشة */
+  gap: 30px; /* مسافة بين كل بطاقة وأخرى */
+  max-width: 1100px;
+  margin: 0 auto; /* لتوسيط الحاوية في منتصف الصفحة */
+}
+
+/* تنسيق البطاقة نفسها */
+.card {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px; /* حواف دائرية */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* ظل خفيف لتعطي إحساساً بالعمق */
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* تأثير عند مرور الماوس على البطاقة */
+.card:hover {
+  transform: translateY(-5px); /* ترتفع البطاقة قليلاً */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* يزيد الظل */
+}
+
+.card h3 {
+  font-size: 20px;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+}
+
+.card p {
+  font-size: 15px;
+  color: var(--text-gray);
+  margin-bottom: 20px;
+  line-height: 1.6; /* مسافة بين الأسطر لقراءة مريحة */
+}
+
+/* تصغير حجم زر التفاصيل داخل البطاقة */
+.card .btn {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+/* 9. قائمة الهامبرغر (للهواتف) */
+.menu-toggle {
+  display: none; /* مخفي على الشاشات الكبيرة افتراضياً */
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* تنسيقات خاصة بالهواتف فقط (أقل من 768 بكسل) */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block; /* نظهر الزر على الهواتف */
+  }
+
+  .navbar nav {
+    display: none; /* نخفي القائمة افتراضياً على الهواتف */
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    background-color: var(--dark-bg);
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+
+  .navbar nav.active {
+    display: flex; /* نظهر القائمة عند إضافة كلاس active بواسطة JS */
+  }
+
+  .navbar nav a {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* التأكد من أن القائمة تظهر كصف أفقي على الشاشات الكبيرة */
+@media (min-width: 769px) {
+  .navbar nav {
+    display: flex;
+    flex-direction: row;
+    position: static;
+    width: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border: none;
+  }
+  .navbar nav a {
+    border-bottom: none;
+    padding: 0;
+  }
+}
+// إغلاق القائمة عند الضغط على أي رابط داخلها
+const navLinks = document.querySelectorAll('#nav-menu a');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+    });
+});
