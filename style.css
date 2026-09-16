@@ -242,3 +242,96 @@ navLinks.forEach(link => {
         navMenu.classList.remove('active');
     });
 });
+/* 10. قسم عن المنصة */
+.about {
+  padding: 60px 20px;
+  background-color: #fff; /* خلفية بيضاء لتمييزه عن باقي الأقسام */
+}
+
+.about-container {
+  max-width: 800px; /* عرض محدود ليكون النص مريحاً للقراءة */
+  margin: 0 auto; /* توسيط المحتوى */
+  text-align: center;
+}
+
+.about p {
+  font-size: 18px;
+  color: var(--text-gray);
+  line-height: 1.8; /* مسافة مريحة بين الأسطر */
+  margin-top: 20px;
+}
+/* 11. قسم تواصل معنا */
+.contact {
+  padding: 60px 20px;
+  background-color: var(--light-bg);
+  text-align: center;
+}
+
+.contact p {
+  font-size: 18px;
+  color: var(--text-gray);
+  margin-bottom: 30px;
+}
+
+/* 12. تنسيق روابط التذييل */
+.footer-links {
+  margin-bottom: 15px;
+}
+
+.footer-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+/* 13. صفحة تفاصيل الدورة */
+.course-details {
+  padding: 60px 20px;
+  background-color: var(--light-bg);
+  min-height: 60vh;
+}
+
+.course-details .container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.course-title {
+  font-size: 36px;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.course-description {
+  font-size: 18px;
+  color: var(--text-gray);
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.course-details h2 {
+  font-size: 24px;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+}
+
+.course-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.course-list li {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  color: var(--text-gray);
+}
