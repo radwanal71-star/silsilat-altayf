@@ -7,16 +7,16 @@
 </head>
 <body>
 
+  <!-- الشريط العلوي -->
   <header class="navbar">
     <div class="logo">سلسلة الطيف</div>
     
-    <!-- زر القائمة (الهامبرغر) -->
     <button class="menu-toggle" id="menu-toggle">☰</button>
     
-    <!-- قائمة الروابط مع إضافة id -->
     <nav id="nav-menu">
-      <a href="#">الدورات</a>
-      <a href="#">تسجيل الدخول</a>
+      <a href="index.html">الرئيسية</a>
+      <a href="#courses">الدورات</a>
+      <a href="login.html">تسجيل الدخول</a>
       <a href="#">جديد</a>
       <a href="#">أدمن</a>
     </nav>
@@ -26,18 +26,19 @@
   <section class="hero">
     <h1>تعلّم بمنهجية الطيف</h1>
     <p>منصة تعليمية عربية تركّز على التطبيق قبل الحفظ.</p>
-    <a href="#" class="btn">ابدأ الآن</a>
+    <a href="#courses" class="btn">ابدأ الآن</a>
   </section>
 
   <!-- قسم الدورات -->
-  <section class="courses">
+  <section class="courses" id="courses">
     <h2 class="section-title">أحدث الدورات</h2>
     <div class="courses-container">
       
       <div class="card">
         <h3>أساسيات البرمجة</h3>
         <p>تعلم المفاهيم الأساسية للبرمجة بطريقة سهلة ومبسطة.</p>
-    <a href="course-details.html" class="btn">التفاصيل</a>
+        <a href="course-details.html" class="btn">التفاصيل</a>
+      </div>
 
       <div class="card">
         <h3>تصميم واجهات المستخدم</h3>
@@ -51,35 +52,38 @@
         <a href="#" class="btn">التفاصيل</a>
       </div>
 
-    </div> <!-- ✅ إغلاق حاوية البطاقات هنا -->
-  </section> <!-- ✅ إغلاق قسم الدورات هنا -->
-<!-- قسم عن المنصة -->
-<section class="about">
-  <div class="about-container">
-    <h2 class="section-title">عن المنصة</h2>
-    <p>
-      "سلسلة الطيف" هي منصة تعليمية وتدريبية عربية، تهدف إلى تقديم محتوى تعليمي 
-      عالي الجودة يركز على التطبيق العملي قبل الحفظ. نؤمن بأن التعلم الحقيقي 
-      يحدث عندما يمارس المتعلم ما يتعلمه بشكل مباشر.
-    </p>
-  </div>
-</section>
-<!-- قسم تواصل معنا -->
-<section class="contact">
-  <h2 class="section-title">تواصل معنا</h2>
-  <p>هل لديك أي استفسار أو اقتراح؟ يسعدنا تواصلك معنا.</p>
-  <a href="mailto:radwan.al71@gmail.com" class="btn">راسلنا</a>
-</section>
-<a href="course-details.html" class="btn">التفاصيل</a>
+    </div>
+  </section>
+
+  <!-- قسم عن المنصة -->
+  <section class="about">
+    <div class="about-container">
+      <h2 class="section-title">عن المنصة</h2>
+      <p>
+        "سلسلة الطيف" هي منصة تعليمية وتدريبية عربية، تهدف إلى تقديم محتوى تعليمي 
+        عالي الجودة يركز على التطبيق العملي قبل الحفظ. نؤمن بأن التعلم الحقيقي 
+        يحدث عندما يمارس المتعلم ما يتعلمه بشكل مباشر.
+      </p>
+    </div>
+  </section>
+
+  <!-- قسم تواصل معنا -->
+  <section class="contact">
+    <h2 class="section-title">تواصل معنا</h2>
+    <p>هل لديك أي استفسار أو اقتراح؟ يسعدنا تواصلك معنا.</p>
+    <a href="mailto:radwan.al71@gmail.com" class="btn">راسلنا</a>
+  </section>
+
+  <!-- التذييل -->
   <footer class="footer">
-  <div class="footer-links">
-    <a href="#">الرئيسية</a>
-    <a href="#">الدورات</a>
-    <a href="#">اتصل بنا</a>
-  </div>
-  <p>© 2026 منصة سلسلة الطيف. جميع الحقوق محفوظة.</p>
-</footer>
-  <!-- ربط ملف الجافاسكربت -->
+    <div class="footer-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="#courses">الدورات</a>
+      <a href="mailto:radwan.al71@gmail.com">اتصل بنا</a>
+    </div>
+    <p>© 2026 منصة سلسلة الطيف. جميع الحقوق محفوظة.</p>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
