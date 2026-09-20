@@ -437,3 +437,59 @@ navLinks.forEach(link => {
 .signup-link a:hover {
   text-decoration: underline;
 }
+/* 9. قائمة الهامبرغر (للهواتف) */
+.menu-toggle {
+  display: none; /* مخفي على الشاشات الكبيرة افتراضياً */
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* تنسيقات خاصة بالهواتف فقط (أقل من 768 بكسل) */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block; /* نظهر الزر على الهواتف */
+  }
+
+  .navbar nav {
+    display: none; /* نخفي القائمة افتراضياً على الهواتف */
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    background-color: var(--dark-bg);
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+
+  .navbar nav.active {
+    display: flex; /* نظهر القائمة عند إضافة كلاس active بواسطة JS */
+  }
+
+  .navbar nav a {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* التأكد من أن القائمة تظهر كصف أفقي على الشاشات الكبيرة */
+@media (min-width: 769px) {
+  .navbar nav {
+    display: flex;
+    flex-direction: row;
+    position: static;
+    width: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border: none;
+  }
+  .navbar nav a {
+    border-bottom: none;
+    padding: 0;
+  }
+}
