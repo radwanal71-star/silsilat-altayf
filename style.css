@@ -1,12 +1,12 @@
 /* 1. المتغيرات (تنظيم الألوان) */
 :root {
-  --primary-color: #38bdf8;    /* اللون الأزرق الأساسي */
-  --primary-hover: #0ea5e9;    /* لون الزر عند المرور */
-  --dark-bg: #1e293b;          /* لون الشريط العلوي والتذييل */
-  --light-bg: #f9f9f9;         /* لون خلفية الصفحة */
-  --text-dark: #222;           /* لون النص الغامق */
-  --text-light: #fff;          /* لون النص الفاتح */
-  --text-gray: #555;           /* لون النص الرمادي */
+  --primary-color: #38bdf8;
+  --primary-hover: #0ea5e9;
+  --dark-bg: #1e293b;
+  --light-bg: #f9f9f9;
+  --text-dark: #222;
+  --text-light: #fff;
+  --text-gray: #555;
 }
 
 /* 2. إعدادات عامة */
@@ -18,7 +18,7 @@
 
 body {
   font-family: "Tahoma", sans-serif;
-  background-color: var(--light-bg); /* ✅ تصحيح: خلفية فاتحة */
+  background-color: var(--light-bg);
   color: var(--text-dark);
 }
 
@@ -30,14 +30,13 @@ body {
   padding: 15px 25px;
   background-color: var(--dark-bg);
   color: var(--text-light);
-
-      position: relative;
+  position: relative;
 }
 
 .logo {
   font-size: 22px;
   font-weight: bold;
-  color: var(--primary-color); /* ✅ تصحيح: الشعار أزرق */
+  color: var(--primary-color);
   white-space: nowrap;
 }
 
@@ -66,7 +65,7 @@ body {
 .hero h1 {
   font-size: 42px;
   margin-bottom: 20px;
-  color: var(--text-dark); /* ✅ تصحيح: تم إكمال اللون المفقود */
+  color: var(--text-dark);
 }
 
 .hero p {
@@ -96,15 +95,12 @@ body {
   .navbar {
     padding: 20px 50px;
   }
-  
   .hero {
     padding: 150px 20px;
   }
-  
   .hero h1 {
     font-size: 56px;
   }
-  
   .hero p {
     font-size: 22px;
   }
@@ -123,6 +119,7 @@ body {
   font-size: 14px;
   color: #94a3b8;
 }
+
 /* 8. قسم الدورات */
 .courses {
   padding: 60px 20px;
@@ -136,29 +133,26 @@ body {
   margin-bottom: 40px;
 }
 
-/* الحاوية التي ستضم البطاقات بجانب بعضها */
 .courses-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* يجعل البطاقات تتوزع تلقائياً حسب حجم الشاشة */
-  gap: 30px; /* مسافة بين كل بطاقة وأخرى */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
   max-width: 1100px;
-  margin: 0 auto; /* لتوسيط الحاوية في منتصف الصفحة */
+  margin: 0 auto;
 }
 
-/* تنسيق البطاقة نفسها */
 .card {
   background-color: #fff;
   padding: 25px;
-  border-radius: 12px; /* حواف دائرية */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* ظل خفيف لتعطي إحساساً بالعمق */
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* تأثير عند مرور الماوس على البطاقة */
 .card:hover {
-  transform: translateY(-5px); /* ترتفع البطاقة قليلاً */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* يزيد الظل */
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .card h3 {
@@ -171,17 +165,17 @@ body {
   font-size: 15px;
   color: var(--text-gray);
   margin-bottom: 20px;
-  line-height: 1.6; /* مسافة بين الأسطر لقراءة مريحة */
+  line-height: 1.6;
 }
 
-/* تصغير حجم زر التفاصيل داخل البطاقة */
 .card .btn {
   padding: 10px 20px;
   font-size: 14px;
 }
+
 /* 9. قائمة الهامبرغر (للهواتف) */
 .menu-toggle {
-  display: none; /* مخفي على الشاشات الكبيرة افتراضياً */
+  display: none;
   background: none;
   border: none;
   color: var(--text-light);
@@ -189,14 +183,13 @@ body {
   cursor: pointer;
 }
 
-/* تنسيقات خاصة بالهواتف فقط (أقل من 768 بكسل) */
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block; /* نظهر الزر على الهواتف */
+    display: block;
   }
 
   .navbar nav {
-    display: none; /* نخفي القائمة افتراضياً على الهواتف */
+    display: none;
     flex-direction: column;
     position: absolute;
     top: 100%;
@@ -209,7 +202,7 @@ body {
   }
 
   .navbar nav.active {
-    display: flex; /* نظهر القائمة عند إضافة كلاس active بواسطة JS */
+    display: flex;
   }
 
   .navbar nav a {
@@ -218,7 +211,6 @@ body {
   }
 }
 
-/* التأكد من أن القائمة تظهر كصف أفقي على الشاشات الكبيرة */
 @media (min-width: 769px) {
   .navbar nav {
     display: flex;
@@ -235,31 +227,26 @@ body {
     padding: 0;
   }
 }
-// إغلاق القائمة عند الضغط على أي رابط داخلها
-const navLinks = document.querySelectorAll('#nav-menu a');
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-    });
-});
+
 /* 10. قسم عن المنصة */
 .about {
   padding: 60px 20px;
-  background-color: #fff; /* خلفية بيضاء لتمييزه عن باقي الأقسام */
+  background-color: #fff;
 }
 
 .about-container {
-  max-width: 800px; /* عرض محدود ليكون النص مريحاً للقراءة */
-  margin: 0 auto; /* توسيط المحتوى */
+  max-width: 800px;
+  margin: 0 auto;
   text-align: center;
 }
 
 .about p {
   font-size: 18px;
   color: var(--text-gray);
-  line-height: 1.8; /* مسافة مريحة بين الأسطر */
+  line-height: 1.8;
   margin-top: 20px;
 }
+
 /* 11. قسم تواصل معنا */
 .contact {
   padding: 60px 20px;
@@ -289,6 +276,7 @@ navLinks.forEach(link => {
 .footer-links a:hover {
   color: var(--primary-color);
 }
+
 /* 13. صفحة تفاصيل الدورة */
 .course-details {
   padding: 60px 20px;
@@ -335,12 +323,13 @@ navLinks.forEach(link => {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   color: var(--text-gray);
 }
-/* 14. صفحة تسجيل الدخول */
+
+/* 14. صفحة تسجيل الدخول وإنشاء الحساب */
 .login-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh; /* تأخذ 80% من ارتفاع الشاشة */
+  min-height: 80vh;
   padding: 40px 20px;
   background-color: var(--light-bg);
 }
@@ -351,7 +340,7 @@ navLinks.forEach(link => {
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 450px; /* عرض أقصى للنموذج */
+  max-width: 450px;
   text-align: center;
 }
 
@@ -367,7 +356,6 @@ navLinks.forEach(link => {
   margin-bottom: 30px;
 }
 
-/* تنسيق حقول الإدخال */
 .form-group {
   text-align: right;
   margin-bottom: 20px;
@@ -398,7 +386,6 @@ navLinks.forEach(link => {
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
 
-/* زر تسجيل الدخول */
 .login-btn {
   width: 100%;
   padding: 14px;
@@ -408,7 +395,6 @@ navLinks.forEach(link => {
   margin-top: 10px;
 }
 
-/* رسالة التنبيه */
 .message {
   margin-top: 15px;
   font-size: 14px;
@@ -417,79 +403,25 @@ navLinks.forEach(link => {
 }
 
 .message.error {
-  color: #ef4444; /* أحمر */
+  color: #ef4444;
 }
 
 .message.success {
-  color: #22c55e; /* أخضر */
+  color: #22c55e;
 }
-/* رابط إنشاء حساب */
+
 .signup-link {
   margin-top: 25px;
   font-size: 14px;
   color: var(--text-gray);
 }
+
 .signup-link a {
   color: var(--primary-color);
   text-decoration: none;
   font-weight: bold;
 }
+
 .signup-link a:hover {
   text-decoration: underline;
-}
-/* 9. قائمة الهامبرغر (للهواتف) */
-.menu-toggle {
-  display: none; /* مخفي على الشاشات الكبيرة افتراضياً */
-  background: none;
-  border: none;
-  color: var(--text-light);
-  font-size: 28px;
-  cursor: pointer;
-}
-
-/* تنسيقات خاصة بالهواتف فقط (أقل من 768 بكسل) */
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block; /* نظهر الزر على الهواتف */
-  }
-
-  .navbar nav {
-    display: none; /* نخفي القائمة افتراضياً على الهواتف */
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 100%;
-    background-color: var(--dark-bg);
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-
-  .navbar nav.active {
-    display: flex; /* نظهر القائمة عند إضافة كلاس active بواسطة JS */
-  }
-
-  .navbar nav a {
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}
-
-/* التأكد من أن القائمة تظهر كصف أفقي على الشاشات الكبيرة */
-@media (min-width: 769px) {
-  .navbar nav {
-    display: flex;
-    flex-direction: row;
-    position: static;
-    width: auto;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-    border: none;
-  }
-  .navbar nav a {
-    border-bottom: none;
-    padding: 0;
-  }
 }
