@@ -425,3 +425,37 @@ body {
 .signup-link a:hover {
   text-decoration: underline;
 }
+/* 15. تحسين صفحة تفاصيل الدورة */
+.course-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.course-meta {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.course-meta span {
+  font-size: 15px;
+  color: var(--text-dark);
+  font-weight: bold;
+}
+
+.course-enroll-btn {
+  margin-top: 20px;
+  background-color: var(--primary-hover); /* لون مختلف قليلاً لتمييز زر التسجيل */
+  font-size: 16px;
+  padding: 14px 40px;
+}
