@@ -91,7 +91,7 @@ body {
 }
 
 /* 6. التصميم المتجاوب للشاشات الكبيرة */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .navbar {
     padding: 20px 50px;
   }
@@ -183,7 +183,7 @@ body {
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .menu-toggle {
     display: block;
   }
@@ -211,7 +211,7 @@ body {
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
   .navbar nav {
     display: flex;
     flex-direction: row;
