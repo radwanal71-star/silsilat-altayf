@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم | سلسلة الطيف</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- الشريط العلوي -->
+  <header class="navbar">
+    <div class="logo">سلسلة الطيف</div>
+    
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    
+    <nav id="nav-menu">
+      <a href="index.html">الرئيسية</a>
+      <a href="dashboard.html">لوحة التحكم</a>
+      <a href="#" id="logout-btn">تسجيل الخروج</a>
+    </nav>
+  </header>
+
+  <!-- لوحة التحكم -->
+  <section class="dashboard">
+    <div class="dashboard-container">
+      
+      <!-- الترحيب -->
+      <div class="welcome-box">
+        <h1>مرحباً بك، <span id="user-name">طالب</span> 👋</h1>
+        <p>هذه لوحة التحكم الخاصة بك. تابع تقدمك في الدورات.</p>
+      </div>
+
+      <!-- إحصائيات سريعة -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 id="courses-count">0</h3>
+          <p>دورة مسجلة</p>
+        </div>
+        <div class="stat-card">
+          <h3>0%</h3>
+          <p>معدل الإنجاز</p>
+        </div>
+        <div class="stat-card">
+          <h3>0</h3>
+          <p>شهادة مكتسبة</p>
+        </div>
+      </div>
+
+      <!-- دوراتي -->
+      <h2 class="dashboard-title">دوراتي</h2>
+      <div class="my-courses">
+        <p class="empty-message">لم تسجل في أي دورة بعد. <a href="index.html#courses">تصفح الدورات</a></p>
+      </div>
+
+      <!-- زر تسجيل الخروج -->
+      <a href="#" id="logout-btn-bottom" class="btn logout-btn">تسجيل الخروج</a>
+
+    </div>
+  </section>
+
+  <!-- التذييل -->
+  <footer class="footer">
+    <p>© 2026 منصة سلسلة الطيف. جميع الحقوق محفوظة.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
