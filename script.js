@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
             message.textContent = '';
             message.className = 'message';
             
+            // 1. التحقق من البريد الإلكتروني
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 message.textContent = '⚠️ الرجاء إدخال بريد إلكتروني صحيح.';
@@ -39,17 +40,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // 2. التحقق من كلمة المرور
             if (password.length < 6) {
                 message.textContent = '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل.';
                 message.classList.add('error');
                 return;
             }
             
-            // النجاح: حفظ البريد والتوجيه للوحة التحكم
+            // 3. التحقق من بيانات المستخدم في localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                message.textContent = '⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+                message.classList.add('error');
+                return;
+            }
+            
+            // 4. النجاح
             message.textContent = '✅ تم تسجيل الدخول بنجاح! جاري التوجيه...';
             message.classList.add('success');
             
-            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', user.name);
+            localStorage.setItem('userEmail', user.email);
             
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
@@ -75,12 +88,14 @@ document.addEventListener('DOMContentLoaded', function() {
             message.textContent = '';
             message.className = 'message';
             
+            // 1. التحقق من الاسم
             if (name.length < 3) {
                 message.textContent = '⚠️ الرجاء إدخال الاسم الكامل (3 أحرف على الأقل).';
                 message.classList.add('error');
                 return;
             }
             
+            // 2. التحقق من البريد الإلكتروني
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 message.textContent = '⚠️ الرجاء إدخال بريد إلكتروني صحيح.';
@@ -88,18 +103,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // 3. التحقق من كلمة المرور
             if (password.length < 6) {
                 message.textContent = '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل.';
                 message.classList.add('error');
                 return;
             }
             
+            // 4. التحقق من تطابق كلمتي المرور
             if (password !== confirmPassword) {
                 message.textContent = '⚠️ كلمتا المرور غير متطابقتين.';
                 message.classList.add('error');
                 return;
             }
             
+            // 5. قراءة قائمة المستخدمين الحالية
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // 6. التحقق من أن البريد غير مسجل مسبقاً
+            const existingUser = users.find(user => user.email === email);
+            if (existingUser) {
+                message.textContent = '⚠️ هذا البريد الإلكتروني مسجل مسبقاً.';
+                message.classList.add('error');
+                return;
+            }
+            
+            // 7. إضافة المستخدم الجديد
+            const newUser = {
+                name: name,
+                email: email,
+                password: password
+            };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // 8. النجاح
             message.textContent = '✅ تم إنشاء الحساب بنجاح! جاري توجيهك لتسجيل الدخول...';
             message.classList.add('success');
             
@@ -115,10 +153,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const userNameElement = document.getElementById('user-name');
     
     if (userNameElement) {
-        const userEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName');
         
-        if (userEmail) {
-            userNameElement.textContent = userEmail;
+        if (userName) {
+            userNameElement.textContent = userName;
         } else {
             window.location.href = 'login.html';
         }
@@ -132,6 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function handleLogout(event) {
         event.preventDefault();
+        localStorage.removeItem('userName');
         localStorage.removeItem('userEmail');
         window.location.href = 'index.html';
     }
