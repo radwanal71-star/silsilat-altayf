@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تجربة الـ API</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f4f8; padding: 20px; text-align: center; }
+        #users-container { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
+        .user-card {
+            background: white; border-radius: 10px; padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 250px; text-align: right;
+        }
+        .user-card h3 { margin-top: 0; color: #2c3e50; }
+        .user-card p { margin: 5px 0; color: #555; font-size: 14px;}
+    </style>
+</head>
+<body>
+    <h1>قائمة المستخدمين (من API خارجي)</h1>
+    <div id="users-container">
+        <p>جارٍ تحميل البيانات... ⏳</p>
+    </div>
+
+    <script src="api-script.js"></script>
+</body>
+</html>
