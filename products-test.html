@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر المنتجات</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f6f9; padding: 20px; text-align: center; }
+        h1 { color: #2c3e50; }
+
+        /* تصميم مربع البحث */
+        #search-input {
+            padding: 12px 20px;
+            width: 80%;
+            max-width: 400px;
+            border: 2px solid #3498db;
+            border-radius: 30px;
+            font-size: 16px;
+            margin-bottom: 30px;
+            outline: none;
+        }
+
+        /* تصميم الشبكة (Grid) التي ستحتوي على المنتجات */
+        #products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+
+        /* تصميم بطاقة المنتج */
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .product-card:hover { transform: translateY(-5px); }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain; /* لضمان ظهور الصورة كاملة داخل المربع */
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .product-card h3 {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+            height: 40px; /* تثبيت الارتفاع لتتساوى البطاقات */
+            overflow: hidden;
+        }
+
+        .product-card .price {
+            font-size: 18px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* شارة التقييم */
+        .rating {
+            background-color: #f1c40f;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>أحدث المنتجات 🛍️</h1>
+    
+    <input type="text" id="search-input" placeholder="ابحث عن منتج...">
+
+    <!-- الحاوية التي ستظهر فيها المنتجات -->
+    <div id="products-container">
+        <p>جارٍ تحميل المنتجات... ⏳</p>
+    </div>
+
+    <script>
+        // سنضع كود الجافاسكريبت هنا في الخطوة التالية
+    </script>
+</body>
+</html>
