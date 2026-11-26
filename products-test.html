@@ -7,84 +7,72 @@
     <style>
         body { font-family: sans-serif; background-color: #f4f6f9; padding: 20px; text-align: center; }
         h1 { color: #2c3e50; }
-
-        /* تصميم مربع البحث */
-        #search-input {
-            padding: 12px 20px;
-            width: 80%;
-            max-width: 400px;
-            border: 2px solid #3498db;
-            border-radius: 30px;
-            font-size: 16px;
-            margin-bottom: 30px;
-            outline: none;
-        }
-
-        /* تصميم الشبكة (Grid) التي ستحتوي على المنتجات */
-        #products-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            padding: 10px;
-        }
-
-        /* تصميم بطاقة المنتج */
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .product-card:hover { transform: translateY(-5px); }
-
-        .product-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: contain; /* لضمان ظهور الصورة كاملة داخل المربع */
-            border-radius: 8px;
-            background-color: #fff;
-        }
-
-        .product-card h3 {
-            font-size: 16px;
-            margin: 10px 0;
-            color: #333;
-            height: 40px; /* تثبيت الارتفاع لتتساوى البطاقات */
-            overflow: hidden;
-        }
-
-        .product-card .price {
-            font-size: 18px;
-            color: #e74c3c;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        /* شارة التقييم */
-        .rating {
-            background-color: #f1c40f;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            display: inline-block;
-        }
+        #search-input { padding: 12px 20px; width: 80%; max-width: 400px; border: 2px solid #3498db; border-radius: 30px; font-size: 16px; margin-bottom: 30px; outline: none; }
+        #products-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 10px; }
+        .product-card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); text-align: center; }
+        .product-card img { width: 100%; height: 180px; object-fit: contain; border-radius: 8px; background-color: #fff; }
+        .product-card h3 { font-size: 16px; margin: 10px 0; color: #333; height: 40px; overflow: hidden; }
+        .product-card .price { font-size: 18px; color: #e74c3c; font-weight: bold; margin-bottom: 10px; }
+        .rating { background-color: #f1c40f; color: #fff; padding: 4px 10px; border-radius: 15px; font-size: 12px; display: inline-block; }
+        .error-msg { color: red; background: #ffe6e6; padding: 15px; border-radius: 10px; font-weight: bold; margin: 20px; }
     </style>
 </head>
 <body>
     <h1>أحدث المنتجات 🛍️</h1>
-    
     <input type="text" id="search-input" placeholder="ابحث عن منتج...">
-
-    <!-- الحاوية التي ستظهر فيها المنتجات -->
     <div id="products-container">
         <p>جارٍ تحميل المنتجات... ⏳</p>
     </div>
 
     <script>
-        // سنضع كود الجافاسكريبت هنا في الخطوة التالية
+        const container = document.getElementById('products-container');
+        const searchInput = document.getElementById('search-input');
+        let allProducts = []; 
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch('https://dummyjson.com/products?limit=20');
+                if (!response.ok) throw new Error('فشل الاتصال بالخادم. رمز الخطأ: ' + response.status);
+                
+                const data = await response.json();
+                allProducts = data.products; 
+                displayProducts(allProducts); 
+
+            } catch (error) {
+                // إظهار الخطأ بشكل واضح على الشاشة
+                container.innerHTML = `<div class="error-msg">حدث خطأ: ${error.message}</div>`;
+                console.error(error);
+            }
+        }
+
+        function displayProducts(productsToDisplay) {
+            container.innerHTML = ''; 
+            if (productsToDisplay.length === 0) {
+                container.innerHTML = '<p>لا توجد منتجات تطابق بحثك.</p>';
+                return;
+            }
+            productsToDisplay.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${product.thumbnail}" alt="${product.title}">
+                    <h3>${product.title}</h3>
+                    <p class="price">$${product.price}</p>
+                    <span class="rating">⭐ ${product.rating}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        searchInput.addEventListener('input', (event) => {
+            const searchTerm = event.target.value.toLowerCase();
+            const filteredProducts = allProducts.filter(product => 
+                product.title.toLowerCase().includes(searchTerm)
+            );
+            displayProducts(filteredProducts);
+        });
+
+        fetchProducts();
     </script>
 </body>
 </html>
