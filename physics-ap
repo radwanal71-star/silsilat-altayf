@@ -1,1 +1,1411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهندس وحدة التيار المستمر — إعداد: أ. رضوان العبسي</title>
 
+    <!-- ===== إعدادات تطبيق الويب التقدمي (PWA) ===== -->
+    <meta name="theme-color" content="#0b6e99">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="مهندس التيار">
+    <!-- ============================================== -->
+
+    <style>
+:root {
+        --primary: #0b6e99;
+        --primary-dark: #084d6b;
+        --primary-light: #e3f2fd;
+        --accent: #ff9800;
+        --accent-dark: #e68a00;
+        --bg: #f4f7f6;
+        --text: #1a1a1a;
+        --border: #cfd8dc;
+        --success: #2e7d32;
+        --success-light: #e8f5e9;
+        --danger: #c62828;
+        --danger-light: #ffebee;
+        --gold: #ffd700;
+        --font: "Segoe UI", "Tahoma", "Arial", sans-serif;
+        --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        --radius: 12px;
+    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            direction: rtl;
+            text-align: right;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .app-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .app-header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .teacher-badge {
+            display: inline-block;
+            margin-top: 0.8rem;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 0.3rem 1.2rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 0.8rem 2rem;
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .status-item span {
+            color: var(--primary);
+        }
+        .timer-box {
+            background: var(--primary-light);
+            padding: 0.3rem 1rem;
+            border-radius: 8px;
+        }
+
+        .screen {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+        .card h2 {
+            color: var(--primary);
+            border-right: 4px solid var(--accent);
+            padding-right: 0.6rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.8rem;
+        }
+        .symbol-item {
+            background: var(--primary-light);
+            padding: 0.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid var(--primary);
+        }
+        .symbol-item span {
+            color: var(--danger);
+            font-size: 1.1rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid var(--border);
+            padding: 0.6rem;
+            text-align: center;
+        }
+        .data-table th {
+            background: var(--primary);
+            color: #fff;
+        }
+        .data-table tr:nth-child(even) {
+            background: #f9fbfd;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-accent:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary-light);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quiz-question {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-right: 4px solid var(--accent);
+        }
+        .quiz-question h4 {
+            margin-bottom: 0.8rem;
+            color: var(--primary-dark);
+        }
+        .quiz-options {
+            display: grid;
+            gap: 0.5rem;
+        }
+        .quiz-options label {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .quiz-options label:hover {
+            background: var(--primary-light);
+        }
+        .quiz-options input[type="radio"] {
+            margin-left: 0.5rem;
+            accent-color: var(--primary);
+        }
+
+        .feedback {
+            margin-top: 0.5rem;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            display: none;
+        }
+        .feedback.correct {
+            background: var(--success-light);
+            color: var(--success);
+            display: block;
+        }
+        .feedback.wrong {
+            background: var(--danger-light);
+            color: var(--danger);
+            display: block;
+        }
+
+        .match-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .match-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .match-item {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 0.6rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .match-select {
+            width: 100%;
+            margin-top: 0.3rem;
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: 1px solid var(--primary);
+        }
+
+        .highlight {
+            background: #fff3e0;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border-right: 3px solid var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        .result-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 6px 15px rgba(11,110,153,0.4);
+        }
+        .score-circle .num {
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .score-circle .lbl {
+            font-size: 1rem;
+        }
+
+        .lock-message {
+            background: var(--danger-light);
+            color: var(--danger);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: none;
+            border: 1px solid var(--danger);
+        }
+
+        @media (max-width: 768px) {
+            .status-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .match-container {
+                flex-direction: column;
+            }
+            .screen {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1rem;
+            }
+        }
+
+        /* ===== شاشة القفل ===== */
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0b6e99, #084d6b);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .lock-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            animation: fadeIn 0.4s ease;
+        }
+        .lock-card h2 {
+            color: #0b6e99;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+        .lock-card p {
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+        }
+        .pin-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            direction: ltr;
+        }
+        .pin-inputs input {
+            width: 60px;
+            height: 65px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border: 2px solid #0b6e99;
+            border-radius: 10px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .pin-inputs input:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 0 3px rgba(255,152,0,0.2);
+        }
+        #pinError {
+            color: #c62828;
+            font-weight: bold;
+            height: 22px;
+            margin-bottom: 1rem;
+        }
+        .lock-card button {
+            background: #0b6e99;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+        .lock-card button:hover {
+            background: #084d6b;
+        }
+        .lock-card .hint-text {
+            color: #888;
+            font-size: 0.78rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ شاشة القفل (PIN Lock) ============ -->
+    <div id="lockScreen">
+        <div class="lock-card">
+            <h2>🔒 رمز الدخول مطلوب</h2>
+            <p>
+                يرجى إدخال الرمز المكوّن من 3 أرقام للوصول إلى السباق.
+            </p>
+            <div class="pin-inputs">
+                <input type="tel" id="pin1" maxlength="1" inputmode="numeric" autocomplete="off">
+                <input type="tel" id="pin2" maxlength="1" inputmode="numeric" autocomplete="off">
+                <input type="tel" id="pin3" maxlength="1" inputmode="numeric" autocomplete="off">
+            </div>
+            <p id="pinError"></p>
+            <button onclick="verifyPin()">دخول</button>
+            <p class="hint-text">
+                (نظام الحماية: الرمز يتغير كل 24 ساعة)
+            </p>
+        </div>
+    </div>
+
+    <header class="app-header">
+        <h1>🏆 مهندس وحدة التيار المستمر</h1>
+        <p class="subtitle">
+            تجربة فكرية تعليمية تفاعلية — الفيزياء للصف الثاني الثانوي
+        </p>
+        <div class="teacher-badge">
+            إعداد: أ. رضوان العبسي
+        </div>
+    </header>
+
+    <div class="status-bar" id="statusBar" style="display: none;">
+        <div class="status-item">
+            👤 الطالب: <span id="displayStudentName">-</span>
+        </div>
+        <div class="status-item timer-box">
+            ⏱️ الوقت: <span id="displayTimer">00:00</span>
+        </div>
+        <div class="status-item">
+            ⭐ النقاط: <span id="displayScore">0</span>
+        </div>
+    </div>
+
+    <main id="mainContainer">
+
+        <!-- ============ الشاشة 1: التسجيل ============ -->
+        <section class="screen active" id="screen-register">
+            <div class="card" style="max-width: 600px; margin: 2rem auto; border-top: 5px solid var(--accent);">
+                <h2 style="text-align:center; border:none; font-size:1.5rem;">📝 بطاقة المهندس</h2>
+                <p style="text-align:center; margin-bottom:1.5rem; color:#666;">
+                    أهلاً بك في السباق! يرجى إدخال بياناتك لبدء التحدي.
+                </p>
+
+                <div class="form-group">
+                    <label>اسم المدرسة:</label>
+                    <input type="text" id="inputSchool" placeholder="اكتب اسم مدرستك هنا">
+                </div>
+                <div class="form-group">
+                    <label>اسم الطالب (ثلاثي):</label>
+                    <input type="text" id="inputName" placeholder="اكتب اسمك الكامل">
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div class="form-group">
+                        <label>الصف:</label>
+                        <input type="text" value="الثاني الثانوي" disabled style="background:#eee;">
+                    </div>
+                    <div class="form-group">
+                        <label>الشعبة:</label>
+                        <input type="text" id="inputSection" placeholder="مثال: أ، ب، ج">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:1rem;" onclick="startGame()">🚀 ابدأ السباق الآن</button>
+            </div>
+        </section>
+
+        <!-- ============ الشاشة 2: المراجعة المركزة ============ -->
+        <section class="screen" id="screen-review">
+            <div class="card">
+                <h2>📚 محطة الانطلاق: المراجعة المركزة</h2>
+                <p>
+                    قبل الانطلاق، إليك خريطة المفاهيم والرموز الفيزيائية المعتمدة في المنهج. راجعها جيداً لأنها ستساعدك في حل التحديات.
+                </p>
+
+                <h3 style="color: var(--primary); margin-top:1.5rem; margin-bottom:0.5rem;">1. الرموز الفيزيائية العربية</h3>
+                <div class="symbol-grid">
+                    <div class="symbol-item">
+                        المقاومة <span>[ م ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        شدة التيار <span>[ ت ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        الشحنة الكهربائية <span>[ ش ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        القوة الدافعة الكهربائية <span>[ ق.د ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        فرق الجهد <span>[ ج ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        القدرة الكهربائية <span>[ قد ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        الطاقة الكهربائية <span>[ طا ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        كمية الحرارة <span>[ حر ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        الزمن <span>[ ز ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        المكافئ الكهروحراري <span>[ ي ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        المكافئ الكيميائي <span>[ ك.م ]</span>
+                    </div>
+                    <div class="symbol-item">
+                        الطاقة الحرارية <span>[ طاحر ]</span>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--primary); margin-top:1.5rem; margin-bottom:0.5rem;">2. العلاقات الرياضية الأساسية</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>المفهوم</th><th>العلاقة الرياضية</th><th>ملاحظات</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>شدة التيار</td><td>ت = ش / ز</td><td>الأمبير = كولوم / ثانية</td></tr>
+                        <tr><td>فرق الجهد (قانون أوم)</td><td>ج = م × ت</td><td>الفولت = أمبير × أوم</td></tr>
+                        <tr><td>القدرة الكهربائية</td><td>قد = ج × ت = ت² × م</td><td>الوات = جول / ثانية</td></tr>
+                        <tr><td>الطاقة الكهربائية</td><td>طا = ج × ت × ز</td><td>الجول</td></tr>
+                        <tr><td>قانون جول للحرارة</td><td>حر = (ت² × م × ز) / ي</td><td>ي = 4.18 جول/سعر</td></tr>
+                        <tr><td>الطاقة الحرارية</td><td>طاحر = ت² × م × ز</td><td>بالجول</td></tr>
+                        <tr><td>قانون فاراداي للتحليل</td><td>ك = ك.م × ت × ز</td><td>ك.م بوحدة جم/كولوم</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: var(--primary); margin-top:1.5rem; margin-bottom:0.5rem;">3. وحدات القياس ومكافئتها</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>الكمية</th><th>الوحدة</th><th>المكافئ</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>شدة التيار (ت)</td><td>أمبير (A)</td><td>كولوم / ثانية</td></tr>
+                        <tr><td>فرق الجهد (ج)</td><td>فولت (V)</td><td>جول / كولوم = أمبير × أوم</td></tr>
+                        <tr><td>المقاومة (م)</td><td>أوم (Ω)</td><td>فولت / أمبير</td></tr>
+                        <tr><td>القدرة (قد)</td><td>وات (W)</td><td>جول / ثانية</td></tr>
+                        <tr><td>الطاقة (طا)</td><td>جول (J)</td><td>وات × ثانية</td></tr>
+                        <tr><td>الطاقة التجارية</td><td>كيلووات.ساعة</td><td>3,600,000 جول</td></tr>
+                        <tr><td>الحرارة (حر)</td><td>سعر</td><td>4.18 جول</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: var(--primary); margin-top:1.5rem; margin-bottom:0.5rem;">4. التعريفات والمفاهيم الأساسية</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-size:0.9rem;">
+                    <div class="highlight">
+                        <strong>التيار الكهربائي:</strong> حركة الشحنات الكهربائية (الإلكترونات) عبر موصل.
+                    </div>
+                    <div class="highlight">
+                        <strong>التيار المستمر:</strong> تيار ثابت المقدار والاتجاه مع الزمن.
+                    </div>
+                    <div class="highlight">
+                        <strong>التيار المتردد:</strong> تيار متغير المقدار والاتجاه دورياً مع الزمن.
+                    </div>
+                    <div class="highlight">
+                        <strong>شدة التيار (ت):</strong> معدل مرور الشحنة الكهربائية عبر مقطع الموصل في الثانية.
+                    </div>
+                    <div class="highlight">
+                        <strong>الأمبير:</strong> شدة تيار يمر بشحنة مقدارها 1 كولوم في زمن 1 ثانية.
+                    </div>
+                    <div class="highlight">
+                        <strong>المقاومة (م):</strong> ممانعة الموصل لمرور التيار الكهربائي.
+                    </div>
+                    <div class="highlight">
+                        <strong>القوة الدافعة (ق.د):</strong> الشغل المبذول لنقل وحدة الشحنة في دائرة كاملة.
+                    </div>
+                    <div class="highlight">
+                        <strong>فرق الجهد (ج):</strong> مقدار الشغل المبذول لتحريك وحدة الشحنة بين نقطتين.
+                    </div>
+                    <div class="highlight">
+                        <strong>الوات (قد):</strong> قدرة جهاز يستهلك 1 جول في الثانية.
+                    </div>
+                    <div class="highlight">
+                        <strong>الجول:</strong> هو مقدار الطاقة الكهربائية المستهلكة في موصل يمر فيه تيار شدته واحد أمبير وفرق جهده واحد فولت لمدة ثانية واحدة.
+                    </div>
+                    <div class="highlight">
+                        <strong>كيلووات.ساعة:</strong> الطاقة المستهلكة من مصدر 1 كيلووات لمدة ساعة.
+                    </div>
+                    <div class="highlight">
+                        <strong>المكافئ الحراري (ي):</strong> هو النسبة بين الطاقة الكهربائية في موصل وكمية الحرارة المتولدة فيه.
+                    </div>
+                    <div class="highlight">
+                        <strong>قانون جول:</strong> الحرارة المتولدة في موصل تتناسب طردياً مع ت²، م، ز.
+                    </div>
+                    <div class="highlight">
+                        <strong>قانون كيرشوف الأول:</strong> مجموع التيارات الداخلة لنقطة = الخارجة (حفظ الشحنة).
+                    </div>
+                    <div class="highlight">
+                        <strong>قانون كيرشوف الثاني:</strong> مجموع فروق الجهد والقوى الدافعة في حلقة مغلقة = صفر (حفظ الطاقة).
+                    </div>
+                    <div class="highlight">
+                        <strong>التحليل الكهربائي:</strong> تفكك الإلكتروليت بمرور التيار وترسب المواد عند الأقطاب.
+                    </div>
+                    <div class="highlight">
+                        <strong>المكافئ الكيميائي (ك.م):</strong> كتلة المادة المترسبة لكل وحدة شحنة (جم/كولوم).
+                    </div>
+                    <div class="highlight">
+                        <strong>ظاهرة التأثير الحراري:</strong> تحول الطاقة الكهربائية إلى حرارية عند مرور التيار في موصل.
+                    </div>
+                </div>
+
+                <div style="text-align:center; margin-top:2rem;">
+                    <button class="btn btn-accent" onclick="startTimer(); goToScreen('screen-challenge1')">⚡ أنا جاهز للتحدي الأول</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ الشاشة 3: التحدي الأول ============ -->
+        <section class="screen" id="screen-challenge1">
+            <div class="card">
+                <h2>🏁 المحطة الأولى: أساسيات المهندس (مفاهيم ووحدات)</h2>
+                <p>
+                    أجب عن الأسئلة التالية لتجمع النقاط. كل إجابة صحيحة = 10 نقاط. <strong>يجب أن تحصل على 50% للانتقال.</strong>
+                </p>
+
+                <div id="c1-questions"></div>
+
+                <div style="text-align:center; margin-top:1rem;">
+                    <button id="c1-btn" class="btn btn-primary" onclick="submitChallenge1()">تحقق من إجاباتي</button>
+                </div>
+                <div id="c1-feedback" style="margin-top:1rem; text-align:center; font-weight:bold;"></div>
+                <div id="c1-lock" class="lock-message"></div>
+            </div>
+        </section>
+
+        <!-- ============ الشاشة 4: التحدي الثاني ============ -->
+        <section class="screen" id="screen-challenge2">
+            <div class="card">
+                <h2>⚙️ المحطة الثانية: مختبر الحسابات (قوانين كيرشوف وجول)</h2>
+                <p>
+                    استخدم ورقة وقلم للحسابات، ثم اختر الإجابة الصحيحة. كل إجابة صحيحة = 15 نقطة. <strong>يجب أن تحصل على 50% للانتقال.</strong>
+                </p>
+
+                <div id="c2-questions"></div>
+
+                <div style="text-align:center; margin-top:1rem;">
+                    <button id="c2-btn" class="btn btn-primary" onclick="submitChallenge2()">تحقق من إجاباتي</button>
+                </div>
+                <div id="c2-feedback" style="margin-top:1rem; text-align:center; font-weight:bold;"></div>
+                <div id="c2-lock" class="lock-message"></div>
+            </div>
+        </section>
+
+        <!-- ============ الشاشة 5: التحدي الثالث ============ -->
+        <section class="screen" id="screen-challenge3">
+            <div class="card">
+                <h2>🏭 المحطة الثالثة: مهندس التطبيقات (حياة واقعية)</h2>
+                <p>
+                    هنا نوظف العلم في حياتنا. كل إجابة صحيحة = 15 نقطة. <strong>يجب أن تحصل على 50% للانتقال.</strong>
+                </p>
+
+                <div id="c3-questions"></div>
+
+                <div style="text-align:center; margin-top:1rem;">
+                    <button id="c3-btn" class="btn btn-primary" onclick="submitChallenge3()">تحقق من إجاباتي</button>
+                </div>
+                <div id="c3-feedback" style="margin-top:1rem; text-align:center; font-weight:bold;"></div>
+                <div id="c3-lock" class="lock-message"></div>
+            </div>
+        </section>
+
+        <!-- ============ الشاشة 6: التحدي الرابع ============ -->
+        <section class="screen" id="screen-challenge4">
+            <div class="card">
+                <h2>🧩 المحطة الرابعة: التحدي الذهني (مزاوجة وعلل)</h2>
+                <p>
+                    صل بين المفاهيم، واختر التعليل الصحيح. كل جزء صحيح = 10 نقاط. <strong>يجب أن تحصل على 50% للانتقال.</strong>
+                </p>
+
+                <h3 style="margin-top:1rem;">أولاً: المزاوجة</h3>
+                <div class="match-container" id="matchContainer"></div>
+
+                <h3 style="margin-top:2rem;">ثانياً: العلل والمصطلحات</h3>
+                <div id="c4-questions"></div>
+
+                <div style="text-align:center; margin-top:1rem;">
+                    <button id="c4-btn" class="btn btn-primary" onclick="submitChallenge4()">تحقق من إجاباتي</button>
+                </div>
+                <div id="c4-feedback" style="margin-top:1rem; text-align:center; font-weight:bold;"></div>
+                <div id="c4-lock" class="lock-message"></div>
+            </div>
+        </section>
+
+        <!-- ============ الشاشة 7: لوحة النتائج النهائية ============ -->
+        <section class="screen" id="screen-result">
+            <div class="card result-screen">
+                <h2 style="border:none; color: var(--accent); font-size: 2rem;">🎉 انتهى السباق!</h2>
+
+                <div class="score-circle">
+                    <div class="num" id="finalScore">
+                        0
+                    </div>
+                    <div class="lbl">
+                        نقطة
+                    </div>
+                </div>
+
+                <h3 id="finalMessage" style="color: var(--primary); margin-bottom: 1rem;">أحسنت!</h3>
+                <p>
+                    لقد أكملت جميع محطات السباق بنجاح.
+                </p>
+
+                <div style="text-align:right; background:var(--bg); padding:1.5rem; border-radius:8px; margin:2rem 0;">
+                    <h4>📋 ملخص أداء المهندس:</h4>
+                    <p>
+                        <strong>الاسم:</strong> <span id="resName"></span>
+                    </p>
+                    <p>
+                        <strong>المدرسة:</strong> <span id="resSchool"></span>
+                    </p>
+                    <p>
+                        <strong>الشعبة:</strong> <span id="resSection"></span>
+                    </p>
+                    <p>
+                        <strong>الوقت المستغرق:</strong> <span id="resTime"></span>
+                    </p>
+                </div>
+
+                <button class="btn btn-outline" onclick="location.reload()">🔄 إعادة السباق</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* =====================================================
+   الجزء 1: نظام القفل (PIN Lock) — رمز يتغير كل 24 ساعة
+   ===================================================== */
+        (function() {
+            // إذا كان المستخدم قد فتح الملف في هذه الجلسة، لا نعرض شاشة القفل
+            if (sessionStorage.getItem('unlocked') === 'true') {
+                document.getElementById('lockScreen').style.display = 'none';
+                return;
+            }
+
+            // حفظ تاريخ أول فتح (إن لم يكن موجوداً)
+            let firstOpenDate = localStorage.getItem('firstOpenDate');
+            if (!firstOpenDate) {
+                firstOpenDate = Date.now();
+                localStorage.setItem('firstOpenDate', firstOpenDate);
+            }
+
+            // حساب عدد الأيام المنقضية منذ أول فتح
+            const daysElapsed = Math.floor((Date.now() - firstOpenDate) / (1000 * 60 * 60 * 24));
+
+            // تحديد الرمز الحالي:
+            // الأيام الزوجية (0، 2، 4...) → 123
+            // الأيام الفردية (1، 3، 5...) → 321
+            const correctPin = (daysElapsed % 2 === 0) ? '123': '321';
+
+            // دالة التحقق
+            window.verifyPin = function() {
+                const p1 = document.getElementById('pin1').value;
+                const p2 = document.getElementById('pin2').value;
+                const p3 = document.getElementById('pin3').value;
+                const entered = p1 + p2 + p3;
+
+                if (entered === correctPin) {
+                    sessionStorage.setItem('unlocked', 'true');
+                    document.getElementById('lockScreen').style.display = 'none';
+                } else {
+                    document.getElementById('pinError').textContent = '❌ الرمز غير صحيح. حاول مرة أخرى.';
+                    document.getElementById('pin1').value = '';
+                    document.getElementById('pin2').value = '';
+                    document.getElementById('pin3').value = '';
+                    document.getElementById('pin1').focus();
+                }
+            };
+
+            // تحسين التجربة: الانتقال التلقائي بين الخانات
+            const pins = ['pin1',
+                'pin2',
+                'pin3'];
+            pins.forEach((id, index) => {
+                const el = document.getElementById(id);
+                el.addEventListener('input', (e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    e.target.value = val.slice(-1);
+                    if (val && index < pins.length - 1) {
+                        document.getElementById(pins[index + 1]).focus();
+                    }
+                    // الدخول التلقائي عند اكتمال 3 أرقام
+                    if (index === pins.length - 1 && val && document.getElementById('pin1').value && document.getElementById('pin2').value) {
+                        verifyPin();
+                    }
+                });
+                el.addEventListener('keydown',
+                    (e) => {
+                        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                            document.getElementById(pins[index - 1]).focus();
+                        }
+                    });
+            });
+
+            document.getElementById('pin1').focus();
+        })();
+
+        /* =====================================================
+   الجزء 2: إدارة الحالة والمتغيرات
+   ===================================================== */
+        let studentData = {
+            name: '', school: '', section: ''
+        };
+        let score = 0;
+        let timerInterval;
+        let seconds = 0;
+        let isGameActive = false;
+
+        // نظام الحظر (15 دقيقة = 900 ثانية)
+        const LOCK_TIME_MS = 15 * 60 * 1000;
+        const MAX_ATTEMPTS = 2;
+        let attempts = {
+            1: {
+                count: 0, lockUntil: 0
+            },
+            2: {
+                count: 0, lockUntil: 0
+            },
+            3: {
+                count: 0, lockUntil: 0
+            },
+            4: {
+                count: 0, lockUntil: 0
+            }
+        };
+
+        function goToScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({
+                top: 0, behavior: 'smooth'
+            });
+        }
+
+        /* =====================================================
+   الجزء 3: بدء اللعبة والمؤقت
+   ===================================================== */
+        function startGame() {
+            const name = document.getElementById('inputName').value.trim();
+            const school = document.getElementById('inputSchool').value.trim();
+            const section = document.getElementById('inputSection').value.trim();
+
+            if (!name || !school) {
+                alert('الرجاء إدخال اسم الطالب واسم المدرسة للمتابعة.');
+                return;
+            }
+
+            studentData = {
+                name,
+                school,
+                section
+            };
+            document.getElementById('displayStudentName').textContent = name;
+            document.getElementById('statusBar').style.display = 'flex';
+
+            goToScreen('screen-review');
+        }
+
+        function startTimer() {
+            if (isGameActive) return;
+            isGameActive = true;
+            seconds = 0;
+            timerInterval = setInterval(() => {
+                seconds++;
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('displayTimer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function updateScore(points) {
+            score += points;
+            document.getElementById('displayScore').textContent = score;
+        }
+
+        function showFeedback(elementId, text, isCorrect) {
+            const el = document.getElementById(elementId);
+            el.textContent = text;
+            el.className = `feedback ${isCorrect ? 'correct': 'wrong'}`;
+            el.style.display = 'block';
+        }
+
+        /* =====================================================
+   الجزء 4: بيانات الأسئلة
+   ===================================================== */
+        const questionsC1 = [{
+            q: 'ما هو المكافئ الصحيح لوحدة "الأمبير"؟',
+            opts: ['جول / ثانية',
+                'كولوم / ثانية',
+                'فولت / ثانية',
+                'أوم / ثانية'],
+            ans: 1
+        },
+            {
+                q: 'الرمز الفيزيائي العربي للقوة الدافعة الكهربائية هو:',
+                opts: ['[ ج ]',
+                    '[ ق.د ]',
+                    '[ طا ]',
+                    '[ ش ]'],
+                ans: 1
+            },
+            {
+                q: 'الواط (الوات) هو وحدة قياس:',
+                opts: ['الطاقة الكهربائية',
+                    'شدة التيار',
+                    'القدرة الكهربائية',
+                    'المقاومة'],
+                ans: 2
+            },
+            {
+                q: '1 كيلووات.ساعة يساوي بالجول:',
+                opts: ['3600 جول',
+                    '360000 جول',
+                    '3600000 جول',
+                    '1000 جول'],
+                ans: 2
+            },
+            {
+                q: 'المكافئ الحراري (ي) يساوي:',
+                opts: ['4.18 جول/سعر',
+                    '1 جول/سعر',
+                    '9.8 جول/سعر',
+                    '0.24 جول/سعر'],
+                ans: 0
+            }];
+
+        const questionsC2 = [{
+            q: 'دائرة كهربائية تحتوي على مقاومة (م = 10 أوم)، ويمر بها تيار شدته (ت = 2 أمبير). ما مقدار فرق الجهد (ج)؟',
+            opts: ['5 فولت',
+                '20 فولت',
+                '12 فولت',
+                '8 فولت'],
+            ans: 1
+        },
+            {
+                q: 'موصل مقاومته 10 أوم يمر به تيار 2 أمبير لمدة 7 دقائق. احسب كمية الحرارة المتولدة (حر) بالسعر (ي = 4.18).',
+                opts: ['4019 سعر',
+                    '16800 سعر',
+                    '401.9 سعر',
+                    '1680 سعر'],
+                ans: 0
+            },
+            {
+                q: 'بطارية (ق.د = 12 فولت)، مرت عبر دائرة شحنة مقدارها 3 كولوم. ما مقدار الطاقة الكهربائية (طا) المستهلكة؟',
+                opts: ['4 جول',
+                    '36 جول',
+                    '15 جول',
+                    '9 جول'],
+                ans: 1
+            },
+            {
+                q: 'في قانون كيرشوف الأول، مجموع التيارات الداخلة إلى نقطة تفرع يساوي:',
+                opts: ['مجموع فروق الجهد',
+                    'مجموع التيارات الخارجة',
+                    'صفراً',
+                    'مجموع القوى الدافعة'],
+                ans: 1
+            },
+            {
+                q: 'مصباح قدرته 100 وات يعمل لمدة 4 ساعات. احسب الطاقة المستهلكة بالكيلووات.ساعة.',
+                opts: ['0.4 ك.و.س',
+                    '4 ك.و.س',
+                    '0.04 ك.و.س',
+                    '40 ك.و.س'],
+                ans: 0
+            },
+            {
+                q: 'مصدر قوته الدافعة (ق.د = 12 فولت)، ومقاومته الداخلية (م.د = 1 أوم)، موصول بمقاومة خارجية (م.خ = 5 أوم). ما شدة التيار المار في الدائرة؟',
+                opts: ['2 أمبير',
+                    '3 أمبير',
+                    '1.5 أمبير',
+                    '4 أمبير'],
+                ans: 0
+            },
+            {
+                q: 'جهاز كهربائي مكتوب عليه (55 وات - 110 فولت). ما مقدار شدة التيار الذي يمر به عند تشغيله على فرق الجهد المذكور؟',
+                opts: ['0.5 أمبير',
+                    '2 أمبير',
+                    '1 أمبير',
+                    '0.25 أمبير'],
+                ans: 0
+            },
+            {
+                q: 'جهاز كهربائي مكتوب عليه (55 وات - 110 فولت). ما مقدار مقاومة الجهاز؟',
+                opts: ['220 أوم',
+                    '110 أوم',
+                    '55 أوم',
+                    '440 أوم'],
+                ans: 0
+            },
+            {
+                q: 'موصل مقاومته (م = 5 أوم) يمر به تيار (ت = 3 أمبير) لمدة (ز = 10 ثوانٍ). ما مقدار الطاقة الحرارية (طاحر) المتولدة بالجول؟',
+                opts: ['150 جول',
+                    '450 جول',
+                    '45 جول',
+                    '1500 جول'],
+                ans: 1
+            }];
+
+        const questionsC3 = [{
+            q: 'المكواة الكهربائية تعمل على مبدأ:',
+            opts: ['التأثير الكيميائي للتيار',
+                'التأثير المغناطيسي للتيار',
+                'التأثير الحراري للتيار',
+                'التأثير الضوئي للتيار'],
+            ans: 2
+        },
+            {
+                q: 'عملية طلاء المعادن (مثل طلاء الملعقة بالفضة) تعتمد على:',
+                opts: ['التأثير الحراري للتيار',
+                    'التحليل الكهربائي',
+                    'قانون كيرشوف',
+                    'قانون جول'],
+                ans: 1
+            },
+            {
+                q: 'لماذا تُعتبر أسلاك التوصيل في المنازل مصنوعة من النحاس وليس من الحديد؟',
+                opts: ['لأن النحاس أرخص',
+                    'لأن النحاس أقل مقاومة للتيار الكهربائي',
+                    'لأن الحديد لا يوصل الكهرباء',
+                    'لأن النحاس لا يتأثر بالحرارة'],
+                ans: 1
+            },
+            {
+                q: 'عند حساب فاتورة الكهرباء في المنزل، نستخدم وحدة:',
+                opts: ['الجول',
+                    'الواط',
+                    'الكيلووات.ساعة',
+                    'الأمبير'],
+                ans: 2
+            },
+            {
+                q: 'في عملية تنقية النحاس، يُوصل النحاس غير النقي بالقطب:',
+                opts: ['السالب (الكاثود)',
+                    'الموجب (الأنود)',
+                    'لا يهم',
+                    'يُوصل بمصدر حرارة'],
+                ans: 1
+            },
+            {
+                q: 'في تجربة تحليل كهربائي لمحلول (CuSO4)، إذا كان المكافئ الكيميائي للنحاس (ك.م = 0.000329 جم/كولوم)، ومر تيار شدته 2 أمبير لمدة 100 ثانية. ما كتلة النحاس المترسبة تقريباً؟',
+                opts: ['0.0658 جم',
+                    '0.0329 جم',
+                    '0.1316 جم',
+                    '0.658 جم'],
+                ans: 0
+            }];
+
+        const questionsC4 = [{
+            q: 'علل: عند حساب فاتورة الكهرباء لا نستخدم وحدة الجول رغم أنها الوحدة الأساسية للطاقة.',
+            opts: ['لأن الجول وحدة صغيرة جداً والاستهلاك المنزلي كبير',
+                'لأن الجول لا يقيس الطاقة الكهربائية',
+                'لأن الكيلووات.ساعة أرخص',
+                'لأن الجول للطاقة الحركية فقط'],
+            ans: 0
+        },
+            {
+                q: 'علل: قراءة الفولتميتر لفرق الجهد بين طرفي بطارية في دائرة مفتوحة تساوي (ق.د) للبطارية.',
+                opts: ['لأن الدائرة مفتوحة لا يمر تيار فلا يوجد جهد ضائع',
+                    'لأن الفولتميتر يعطي قراءة أكبر دائماً',
+                    'لأن البطارية تكون مشحونة أكثر',
+                    'لأن المقاومة الداخلية تصبح صفراً'],
+                ans: 0
+            },
+            {
+                q: 'علل: يزداد مقدار الحرارة المتولدة في موصل عند زيادة شدة التيار للضعف.',
+                opts: ['لأن الحرارة تتناسب طردياً مع (ت)',
+                    'لأن الحرارة تتناسب طردياً مع مربع (ت)',
+                    'لأن المقاومة تقل',
+                    'لأن الزمن يزداد'],
+                ans: 1
+            },
+            {
+                q: 'المصطلح العلمي: "الشغل المبذول لنقل وحدة الشحنة الكهربائية في دائرة كاملة مغلقة" هو:',
+                opts: ['فرق الجهد',
+                    'القوة الدافعة الكهربائية',
+                    'المقاومة الكهربائية',
+                    'القدرة الكهربائية'],
+                ans: 1
+            },
+            {
+                q: 'المصطلح العلمي: "ممانعة الموصل لمرور التيار الكهربائي" هو:',
+                opts: ['المقاومة الكهربائية',
+                    'الموصلية',
+                    'فرق الجهد',
+                    'المكافئ الكيميائي'],
+                ans: 0
+            },
+            {
+                q: 'المصطلح العلمي: "مقدار الطاقة الحرارية اللازمة لرفع درجة حرارة جرام واحد من الماء درجة مئوية واحدة" هو:',
+                opts: ['الجول',
+                    'السعر',
+                    'المكافئ الحراري',
+                    'الواط'],
+                ans: 2
+            }];
+
+        const matchPairs = [{
+            left: 'قانون كيرشوف الأول',
+            right: 'حفظ الشحنة الكهربائية'
+        },
+            {
+                left: 'قانون كيرشوف الثاني',
+                right: 'حفظ الطاقة'
+            },
+            {
+                left: 'قانون جول',
+                right: 'الحرارة المتولدة في موصل'
+            },
+            {
+                left: 'قانون فاراداي',
+                right: 'التحليل الكهربائي'
+            },
+            {
+                left: 'المكافئ الحراري (ي)',
+                right: '4.18 جول/سعر'
+            },
+            {
+                left: 'القوة الدافعة الكهربائية',
+                right: 'الشغل المبذول لنقل وحدة الشحنة'
+            },
+            {
+                left: 'المكافئ الكيميائي',
+                right: 'كتلة المادة المترسبة لكل وحدة شحنة'
+            }];
+
+        /* =====================================================
+   الجزء 5: توليد الأسئلة ديناميكياً
+   ===================================================== */
+        function renderQuestions(containerId, questions, groupName) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = questions.map((q, i) => `
+                <div class="quiz-question">
+                <h4>${i + 1}. ${q.q}</h4>
+                <div class="quiz-options">
+                ${q.opts.map((opt, j) => `
+                    <label>
+                    <input type="radio" name="${groupName}_q${i}" value="${j}">
+                    ${opt}
+                    </label>
+                    `).join('')}
+                </div>
+                </div>
+                `).join('');
+        }
+
+        function renderMatch() {
+            const container = document.getElementById('matchContainer');
+            const lefts = matchPairs.map(p => p.left);
+            const rights = matchPairs.map(p => p.right).sort(() => Math.random() - 0.5);
+
+            container.innerHTML = `
+            <div class="match-column">
+            <h4 style="text-align:center; margin-bottom:0.5rem; color:var(--primary);">المفهوم</h4>
+            ${lefts.map((l, i) => `<div class="match-item">${l}</div>`).join('')}
+            </div>
+            <div class="match-column">
+            <h4 style="text-align:center; margin-bottom:0.5rem; color:var(--primary);">الاختيار</h4>
+            ${lefts.map((_, i) => `
+                <div class="match-item" style="padding:0.4rem;">
+                <select class="match-select" id="match_${i}">
+                <option value="">-- اختر --</option>
+                ${rights.map((r, j) => `<option value="${r}">${r}</option>`).join('')}
+                </select>
+                </div>
+                `).join('')}
+            </div>
+            `;
+        }
+
+        renderQuestions('c1-questions', questionsC1, 'c1');
+        renderQuestions('c2-questions', questionsC2, 'c2');
+        renderQuestions('c3-questions', questionsC3, 'c3');
+        renderQuestions('c4-questions', questionsC4, 'c4');
+        renderMatch();
+
+        /* =====================================================
+   الجزء 6: منطق التقييم ونظام الحظر
+   ===================================================== */
+        function checkAttempts(stage, lockEl) {
+            const now = Date.now();
+            const state = attempts[stage];
+
+            if (now < state.lockUntil) {
+                const remaining = Math.ceil((state.lockUntil - now) / 1000);
+                const mins = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                lockEl.textContent = `⛔ لا يمكنك إعادة المحاولة الآن. يرجى الانتظار ${mins} دقيقة و ${secs} ثانية.`;
+                lockEl.style.display = 'block';
+                return false;
+            }
+
+            if (state.count >= MAX_ATTEMPTS) {
+                state.lockUntil = now + LOCK_TIME_MS;
+                state.count = 0;
+                lockEl.textContent = `⛔ لقد استنفدت محاولاتك. يرجى الانتظار 15 دقيقة قبل إعادة المحاولة.`;
+                lockEl.style.display = 'block';
+                return false;
+            }
+
+            lockEl.style.display = 'none';
+            state.count++;
+            return true;
+        }
+
+        function checkQuestions(stage, questions, groupName, btnId, feedbackId, lockId, pointsPerQ, nextScreen) {
+            const lockEl = document.getElementById(lockId);
+
+            if (!checkAttempts(stage, lockEl)) return;
+
+            let correctCount = 0;
+            let total = questions.length;
+
+            questions.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="${groupName}_q${i}"]:checked`);
+                if (selected && +selected.value === q.ans) {
+                    correctCount++;
+                }
+            });
+
+            const percentage = (correctCount / total) * 100;
+            const earnedPoints = correctCount * pointsPerQ;
+            updateScore(earnedPoints);
+
+            const passed = percentage >= 50;
+            const msg = `أجبت بشكل صحيح على ${correctCount} من ${total} أسئلة (${percentage.toFixed(0)}%). حصلت على ${earnedPoints} نقطة. ${passed ? '✅ نجحت في المحطة!': '❌ لم تحقق 50% المطلوبة للانتقال.'}`;
+
+            showFeedback(feedbackId,
+                msg,
+                passed);
+
+            if (passed && nextScreen) {
+                setTimeout(() => goToScreen(nextScreen), 2500);
+            } else {
+                const state = attempts[stage];
+                if (state.count >= MAX_ATTEMPTS) {
+                    const now = Date.now();
+                    state.lockUntil = now + LOCK_TIME_MS;
+                    state.count = 0;
+                    lockEl.textContent = `⛔ لقد استنفدت محاولاتك لهذه المحطة. يرجى الانتظار 15 دقيقة.`;
+                    lockEl.style.display = 'block';
+                }
+            }
+        }
+
+        function submitChallenge1() {
+            checkQuestions(1, questionsC1, 'c1', 'c1-btn', 'c1-feedback', 'c1-lock', 10, 'screen-challenge2');
+        }
+        function submitChallenge2() {
+            checkQuestions(2, questionsC2, 'c2', 'c2-btn', 'c2-feedback', 'c2-lock', 15, 'screen-challenge3');
+        }
+        function submitChallenge3() {
+            checkQuestions(3, questionsC3, 'c3', 'c3-btn', 'c3-feedback', 'c3-lock', 15, 'screen-challenge4');
+        }
+
+        function submitChallenge4() {
+            const lockEl = document.getElementById('c4-lock');
+            if (!checkAttempts(4, lockEl)) return;
+
+            let matchCorrect = 0;
+            matchPairs.forEach((pair, i) => {
+                const selected = document.getElementById(`match_${i}`).value;
+                if (selected === pair.right) matchCorrect++;
+            });
+
+            let reasonCorrect = 0;
+            questionsC4.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="c4_q${i}"]:checked`);
+                if (selected && +selected.value === q.ans) reasonCorrect++;
+            });
+
+            const totalItems = matchPairs.length + questionsC4.length;
+            const totalCorrect = matchCorrect + reasonCorrect;
+            const percentage = (totalCorrect / totalItems) * 100;
+            const earned = (matchCorrect + reasonCorrect) * 10;
+            updateScore(earned);
+
+            const passed = percentage >= 50;
+            const msg = `المزاوجة: ${matchCorrect}/${matchPairs.length} | العلل: ${reasonCorrect}/${questionsC4.length}. حصلت على ${earned} نقطة (${percentage.toFixed(0)}%). ${passed ? '✅ نجحت في المحطة!': '❌ لم تحقق 50% المطلوبة.'}`;
+            showFeedback('c4-feedback',
+                msg,
+                passed);
+
+            if (passed) {
+                setTimeout(() => showFinalResults(), 2500);
+            } else {
+                const state = attempts[4];
+                if (state.count >= MAX_ATTEMPTS) {
+                    const now = Date.now();
+                    state.lockUntil = now + LOCK_TIME_MS;
+                    state.count = 0;
+                    lockEl.textContent = `⛔ لقد استنفدت محاولاتك لهذه المحطة. يرجى الانتظار 15 دقيقة.`;
+                    lockEl.style.display = 'block';
+                }
+            }
+        }
+
+        /* =====================================================
+   الجزء 7: شاشة النتائج النهائية
+   ===================================================== */
+        function showFinalResults() {
+            clearInterval(timerInterval);
+
+            document.getElementById('resName').textContent = studentData.name;
+            document.getElementById('resSchool').textContent = studentData.school;
+            document.getElementById('resSection').textContent = studentData.section || 'غير محدد';
+
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('resTime').textContent = `${mins}:${secs}`;
+
+            document.getElementById('finalScore').textContent = score;
+
+            let msg = '';
+            if (score >= 350) msg = '🏅 مهندس فيزيائي متميز! أداء استثنائي.';
+            else if (score >= 250) msg = '🌟 مهندس متقن! أداء جيد جداً.';
+            else if (score >= 150) msg = '👍 جيد، تحتاج لمراجعة بعض القوانين.';
+            else msg = '📖 تحتاج إلى إعادة مراجعة الدروس وحل المزيد من التمارين.';
+
+            document.getElementById('finalMessage').textContent = msg;
+
+            goToScreen('screen-result');
+        }
+
+        /* =====================================================
+   الجزء 8: تسجيل Service Worker (PWA)
+   ===================================================== */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                .then((reg) => console.log('🚀 التطبيق جاهز للعمل بدون إنترنت:', reg.scope))
+                .catch((err) => console.log('⚠️ فشل تسجيل Service Worker:', err));
+            });
+        }
+    </script>
+</body>
+</html>
